@@ -7,7 +7,7 @@ export const MemberForm = ({ open, onOpenChange, onSubmit, clubs }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [role, setRole] = useState(MEMBER_ROLES.MEMBER);
-  const [clubId, setClubId] = useState('');
+  const [clubId, setClubId] = useState('none');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -19,13 +19,13 @@ export const MemberForm = ({ open, onOpenChange, onSubmit, clubs }) => {
         name,
         email,
         role,
-        club_id: clubId ? parseInt(clubId) : null
+        club_id: clubId && clubId !== 'none' ? parseInt(clubId) : null
       });
       toast.success('Member added successfully!');
       setName('');
       setEmail('');
       setRole(MEMBER_ROLES.MEMBER);
-      setClubId('');
+      setClubId('none');
       onOpenChange(false);
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to add member');
@@ -89,12 +89,15 @@ export const MemberForm = ({ open, onOpenChange, onSubmit, clubs }) => {
                 <Select.Root value={clubId} onValueChange={setClubId}>
                   <Select.Trigger placeholder="Select club" />
                   <Select.Content>
-                    <Select.Item value="">No Club</Select.Item>
-                    {clubs?.map(club => (
-                      <Select.Item key={club.id} value={club.id.toString()}>
-                        {club.name}
-                      </Select.Item>
-                    ))}
+                    <Select.Item value="none">No Club</Select.Item>
+                    {clubs && clubs.length > 0 && clubs.map(club => {
+                      if (!club || !club.id || !club.name) return null;
+                      return (
+                        <Select.Item key={club.id} value={String(club.id)}>
+                          {club.name}
+                        </Select.Item>
+                      );
+                    })}
                   </Select.Content>
                 </Select.Root>
               </Flex>

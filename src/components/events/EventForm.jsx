@@ -97,14 +97,17 @@ export const EventForm = ({ open, onOpenChange, onSubmit, clubs }) => {
             <label>
               <Flex direction="column" gap="1">
                 <span style={{ fontSize: '14px', fontWeight: '500' }}>Club *</span>
-                <Select.Root value={clubId} onValueChange={setClubId} required>
+                <Select.Root value={clubId || ''} onValueChange={setClubId} required>
                   <Select.Trigger placeholder="Select club" />
                   <Select.Content>
-                    {clubs?.map(club => (
-                      <Select.Item key={club.id} value={club.id.toString()}>
-                        {club.name}
-                      </Select.Item>
-                    ))}
+                    {clubs && clubs.length > 0 && clubs.map(club => {
+                      if (!club || !club.id || !club.name) return null;
+                      return (
+                        <Select.Item key={club.id} value={String(club.id)}>
+                          {club.name}
+                        </Select.Item>
+                      );
+                    })}
                   </Select.Content>
                 </Select.Root>
               </Flex>

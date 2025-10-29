@@ -46,14 +46,17 @@ export const BudgetForm = ({ open, onOpenChange, onSubmit, events }) => {
             <label>
               <Flex direction="column" gap="1">
                 <span style={{ fontSize: '14px', fontWeight: '500' }}>Event *</span>
-                <Select.Root value={eventId} onValueChange={setEventId} required>
+                <Select.Root value={eventId || ''} onValueChange={setEventId} required>
                   <Select.Trigger placeholder="Select event" />
                   <Select.Content>
-                    {events?.map(event => (
-                      <Select.Item key={event.id} value={event.id.toString()}>
-                        {event.title}
-                      </Select.Item>
-                    ))}
+                    {events && events.length > 0 && events.map(event => {
+                      if (!event || !event.id || !event.title) return null;
+                      return (
+                        <Select.Item key={event.id} value={String(event.id)}>
+                          {event.title}
+                        </Select.Item>
+                      );
+                    })}
                   </Select.Content>
                 </Select.Root>
               </Flex>

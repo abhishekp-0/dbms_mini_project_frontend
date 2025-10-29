@@ -19,6 +19,8 @@ export const MembersPage = () => {
   const { data: members, loading, error, refetch } = useFetch(() => memberService.getMembers());
   const { data: clubs } = useFetch(() => clubService.getClubs());
 
+  console.log('Clubs data:', clubs, 'Type:', typeof clubs, 'IsArray:', Array.isArray(clubs));
+
   const handleCreateMember = async (memberData) => {
     await memberService.createMember(memberData);
     refetch();

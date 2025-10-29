@@ -18,6 +18,13 @@ export const ClubDetailsPage = () => {
     return <LoadingSpinner message="Loading club details..." />;
   }
 
+  const formatDate = (iso) => {
+    if (!iso) return '';
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso;
+    return d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+  };
+
   return (
     <Flex direction="column" gap="6">
       <Heading size="8">Club Details</Heading>
@@ -32,8 +39,8 @@ export const ClubDetailsPage = () => {
               <Flex direction="column" gap="2">
                 {heads.map((head) => (
                   <Box key={head.id} p="2" style={{ borderBottom: '1px solid var(--gray-5)' }}>
-                    <Text size="2" weight="bold">{head.member_name}</Text>
-                    <Text size="1" color="gray">{head.role}</Text>
+                    <Text size="2" weight="bold">{head.name}</Text>
+                    <Text size="1" color="gray"> ({head.role})</Text>
                   </Box>
                 ))}
               </Flex>
@@ -51,7 +58,7 @@ export const ClubDetailsPage = () => {
                 {events.map((event) => (
                   <Box key={event.id} p="2" style={{ borderBottom: '1px solid var(--gray-5)' }}>
                     <Text size="2" weight="bold">{event.title}</Text>
-                    <Text size="1" color="gray">{event.date}</Text>
+                    <Text size="1" color="gray">{formatDate(event.date)}</Text>
                   </Box>
                 ))}
               </Flex>
